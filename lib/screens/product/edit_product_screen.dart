@@ -1,20 +1,20 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
-import '../Models/productModel.dart';
-import '../Services/productServices.dart';
-import 'homePage.dart';
-import 'widgets/button_widget.dart';
+import '../../models/productModel.dart';
+import '../../services/product_services.dart';
+import '../home_screen.dart';
+import '../../widgets/button_widget.dart';
 
-class EditProduct extends StatefulWidget {
+class EditProductScreen extends StatefulWidget {
   final Product product;
-  const EditProduct({Key? key, required this.product}) : super(key: key);
+  const EditProductScreen({Key? key, required this.product}) : super(key: key);
 
   @override
-  State<EditProduct> createState() => _EditProductState();
+  State<EditProductScreen> createState() => _EditProductScreenState();
 }
 
-class _EditProductState extends State<EditProduct> {
+class _EditProductScreenState extends State<EditProductScreen> {
   bool _loading = false;
   bool publish = false;
   int? id;
@@ -44,21 +44,21 @@ class _EditProductState extends State<EditProduct> {
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
-                Text('Are you sure want add this item?'),
+                Text('Are you sure want edit this item?'),
               ],
             ),
           ),
           actions: <Widget>[
             TextButton(
               child: Text('Yes'),
-              onPressed: () {
-                ProductServices.EditProduct(
+              onPressed: () async {
+                await ProductServices.EditProduct(
                     widget.product.id,
                     nameController.text,
                     imageLinkController.text,
                     priceController.text);
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => HomePage()));
+                    MaterialPageRoute(builder: (context) => HomeScreen()));
               },
             ),
             TextButton(

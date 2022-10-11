@@ -1,20 +1,21 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
-import '../Models/productModel.dart';
-import '../Services/productServices.dart';
-import 'editProduct.dart';
-import 'homePage.dart';
+import '../../models/productModel.dart';
+import '../../services/product_services.dart';
+import 'edit_product_screen.dart';
+import '../home_screen.dart';
 
-class ProductDescription extends StatefulWidget {
+class SingleProductScreen extends StatefulWidget {
   final Product product;
-  const ProductDescription({Key? key, required this.product}) : super(key: key);
+  const SingleProductScreen({Key? key, required this.product})
+      : super(key: key);
 
   @override
-  State<ProductDescription> createState() => _ProductDescriptionState();
+  State<SingleProductScreen> createState() => _SingleProductScreenState();
 }
 
-class _ProductDescriptionState extends State<ProductDescription> {
+class _SingleProductScreenState extends State<SingleProductScreen> {
   bool _loading = false;
 
   Future<void> _confirmDialog() async {
@@ -37,7 +38,7 @@ class _ProductDescriptionState extends State<ProductDescription> {
               onPressed: () {
                 ProductServices.DeleteProduct(widget.product.id.toString());
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => HomePage()));
+                    MaterialPageRoute(builder: (context) => HomeScreen()));
               },
             ),
             TextButton(
@@ -117,8 +118,8 @@ class _ProductDescriptionState extends State<ProductDescription> {
                             await Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) =>
-                                      EditProduct(product: widget.product)),
+                                  builder: (context) => EditProductScreen(
+                                      product: widget.product)),
                             );
                           },
                         ),

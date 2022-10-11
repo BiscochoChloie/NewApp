@@ -1,22 +1,22 @@
 // ignore_for_file: prefer_const_constructors, use_build_context_synchronously
 
 import 'package:flutter/material.dart';
-import 'package:q/Models/userModel.dart';
+import 'package:q/models/userModel.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../Services/authServices.dart';
-import 'homePage.dart';
-import 'register.dart';
-import 'widgets/button_widget.dart';
+import '../../services/auth_services.dart';
+import '../home_screen.dart';
+import 'register_screen.dart';
+import '../../widgets/button_widget.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _LoginScreenState extends State<LoginScreen> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
@@ -40,21 +40,24 @@ class _LoginPageState extends State<LoginPage> {
     RegExp regex = RegExp(pattern);
     if (!regex.hasMatch(value!)) {
       return 'Enter Valid Email';
-    }
-    if (value.isEmpty) {
-      return 'Enter Password';
     } else {
       return null;
     }
   }
 
   String? validatePassword(String? value) {
-// Indian Mobile number are of 10 digit only
     if (value!.isEmpty) {
       return 'Enter Password';
     } else {
       return null;
     }
+  }
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
   }
 
   @override
@@ -65,15 +68,6 @@ class _LoginPageState extends State<LoginPage> {
         appBar: AppBar(
           elevation: 0,
           backgroundColor: Colors.white,
-          leading: IconButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              icon: const Icon(
-                Icons.arrow_back,
-                size: 20,
-                color: Colors.black,
-              )),
         ),
         body: SizedBox(
           height: MediaQuery.of(context).size.height,
@@ -156,15 +150,23 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     ButtonWidget(
                       text: 'Login',
-                      onClicked: () async {
-                        await AuthServices.logIn(
-                          emailController.text,
-                          passwordController.text,
-                        );
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => HomePage()),
-                        );
+                      onClicked: () {
+                        if (_formkey.currentState!.validate()) {
+                          setState(() {
+                            AuthServices.logIn(
+                              emailController.text,
+                              passwordController.text,
+                            );
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => HomeScreen()),
+                            );
+                          });
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(content: Text("Something wrong")));
+                        }
                       },
                     ),
                     SizedBox(
@@ -185,7 +187,7 @@ class _LoginPageState extends State<LoginPage> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => RegisterPage()),
+                                  builder: (context) => RegisterScreen()),
                             );
                           },
                         )

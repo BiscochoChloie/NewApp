@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import '../Configuration/ApiConfig.dart';
-import '../Models/productModel.dart';
+import '../models/productModel.dart';
 
 class ProductServices {
   static Future<List<Product>> getAllProducts() async {
@@ -11,7 +11,7 @@ class ProductServices {
     preferences.reload();
     token = preferences.getString('token')!;
     var response = await http.get(
-      Uri.parse("${ApiConfig.BASE_URL}/api/products?page=1"),
+      Uri.parse("${ApiConfig.BASE_URL}/api/products"),
       headers: {
         "Content-Type": "application/json",
         "accept": "application/json",
@@ -92,7 +92,8 @@ class ProductServices {
     }
   }
 
-  static Future<void> EditProduct(int id, String name, imagelink, price) async {
+  static Future<Product> EditProduct(
+      int id, String name, imagelink, price) async {
     var jsonResponse;
     Map data = {
       'name': name,
@@ -123,7 +124,8 @@ class ProductServices {
     print(response.statusCode);
 
     if (response.statusCode == 201) {
-      jsonResponse = json.decode(response.body.toString());
+      return Product.fromJson(jsonDecode(response.body));
+      // jsonResponse = json.decode(response.body.toString());
     } else {
       throw Exception('Failed to Edit a Product');
     }

@@ -1,19 +1,19 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
-import 'package:q/Models/productModel.dart';
+import 'package:q/models/productModel.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../Services/productServices.dart';
-import 'homePage.dart';
-import 'widgets/button_widget.dart';
+import '../../services/product_services.dart';
+import '../home_screen.dart';
+import '../../widgets/button_widget.dart';
 
-class addProduct extends StatefulWidget {
+class AddProductScreen extends StatefulWidget {
   @override
-  State<addProduct> createState() => _addProductState();
+  State<AddProductScreen> createState() => _AddProductScreenState();
 }
 
-class _addProductState extends State<addProduct> {
+class _AddProductScreenState extends State<AddProductScreen> {
   late int id;
   TextEditingController nameController = TextEditingController();
   TextEditingController imageLinkController = TextEditingController();
@@ -48,12 +48,12 @@ class _addProductState extends State<addProduct> {
           actions: <Widget>[
             TextButton(
               child: Text('Yes'),
-              onPressed: () {
-                ProductServices.addProduct(nameController.text,
+              onPressed: () async {
+                await ProductServices.addProduct(nameController.text,
                     imageLinkController.text, priceController.text);
 
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => HomePage()));
+                    MaterialPageRoute(builder: (context) => HomeScreen()));
               },
             ),
             TextButton(

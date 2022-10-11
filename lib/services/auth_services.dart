@@ -37,6 +37,7 @@ class AuthServices {
 
   static Future<void> Register(
       String name, email, password, passwordConfirmation) async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
     var jsonResponse;
     Map data = {
       'name': name,
@@ -64,6 +65,7 @@ class AuthServices {
 
     if (response.statusCode == 201) {
       jsonResponse = json.decode(response.body.toString());
+      preferences.setString("token", json.decode(response.body)['token']);
       print('success');
     } else {
       print('error');
@@ -74,7 +76,7 @@ class AuthServices {
     var jsonResponse;
     String token;
 
-    SharedPreferences preferences = await SharedPreferences.getInstance();
+    final SharedPreferences preferences = await SharedPreferences.getInstance();
     preferences.reload();
     token = preferences.getString('token')!;
 
